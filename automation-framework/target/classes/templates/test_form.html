@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout :: common_head}"></head>
+
+<body>
+
+    <!-- Sidebar Include -->
+    <div th:replace="~{layout :: sidebar}"></div>
+
+    <div class="main-content">
+
+        <div class="container-fluid px-0">
+            <!-- Breadcrumb & Header -->
+            <div class="mb-4">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-2">
+                        <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Create Test</li>
+                    </ol>
+                </nav>
+                <h2 class="fw-bold">Design New Automation Scenario</h2>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="custom-card">
+                        <div class="card-body p-5">
+                            <h5 class="mb-4 text-primary fw-bold"><i class="fas fa-vial me-2"></i>Test Case Details</h5>
+
+                            <form action="/test/save" method="post" th:object="${testCase}">
+                                <div class="row g-4">
+                                    <div class="col-md-8">
+                                        <label class="form-label fw-bold text-muted small text-uppercase">Test Case
+                                            Name</label>
+                                        <input type="text" class="form-control form-control-lg bg-light border-0"
+                                            th:field="*{testName}"
+                                            placeholder="e.g., Verify Login with Valid Credentials" required>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold text-muted small text-uppercase">Browser
+                                            Engine</label>
+                                        <select class="form-select form-select-lg bg-light border-0"
+                                            th:field="*{browserPreference}">
+                                            <option value="chrome">&#xf268; Google Chrome</option>
+                                            <option value="firefox">&#xf269; Mozilla Firefox</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label
+                                            class="form-label fw-bold text-muted small text-uppercase">Description</label>
+                                        <input type="text" class="form-control bg-light border-0"
+                                            th:field="*{description}"
+                                            placeholder="Provide a brief purpose of this test scenario...">
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <label
+                                                class="form-label fw-bold text-muted small text-uppercase mb-0">Automation
+                                                Steps (Keyword Driven)</label>
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#keywordModal"
+                                                class="text-decoration-none small text-primary fw-bold"><i
+                                                    class="fas fa-book me-1"></i> View Keyword Docs</a>
+                                        </div>
+
+                                        <div class="alert alert-light border d-flex align-items-start p-3 mb-2">
+                                            <i class="fas fa-info-circle text-info mt-1 me-3"></i>
+                                            <div>
+                                                <small class="d-block text-muted">Use syntax
+                                                    <code>KEYWORD|PARAMS</code>. Supported keywords:</small>
+                                                <div class="mt-1 font-monospace" style="font-size: 0.8rem;">
+                                                    <span class="badge bg-white text-dark border me-1">OPEN|url</span>
+                                                    <span
+                                                        class="badge bg-white text-dark border me-1">TYPE|locator:val|text</span>
+                                                    <span
+                                                        class="badge bg-white text-dark border me-1">CLICK|locator:val</span>
+                                                    <span
+                                                        class="badge bg-white text-dark border me-1">ASSERT_TITLE|text</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <textarea class="form-control font-monospace bg-light border-0 p-3"
+                                            th:field="*{testSteps}" rows="10"
+                                            style="line-height: 1.6; font-size: 0.9rem;"
+                                            placeholder="OPEN|https://www.google.com&#10;TYPE|name:q|Selenium WebDriver&#10;CLICK|name:btnK&#10;ASSERT_TITLE|Selenium"></textarea>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold text-muted small text-uppercase">Expected
+                                            Result</label>
+                                        <input type="text" class="form-control bg-light border-0"
+                                            th:field="*{expectedResult}"
+                                            value="The application should behave as expected and return no errors.">
+                                    </div>
+
+                                    <div class="col-12 mt-5 d-flex gap-3">
+                                        <button type="submit"
+                                            class="btn btn-primary-custom text-white px-5 py-2 shadow-sm">
+                                            <i class="fas fa-save me-2"></i> Save Test Case
+                                        </button>
+                                        <a href="/" class="btn btn-light px-4 py-2 border">Cancel</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Keyword Documentation Modal -->
+    <div class="modal fade" id="keywordModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Keyword Documentation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Use the following pipe-separated syntax:</p>
+                    <table class="table table-bordered table-sm">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Keyword</th>
+                                <th>Syntax</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>OPEN</td>
+                                <td><code>OPEN|url</code></td>
+                            </tr>
+                            <tr>
+                                <td>TYPE</td>
+                                <td><code>TYPE|locator:val|text</code></td>
+                            </tr>
+                            <tr>
+                                <td>CLICK</td>
+                                <td><code>CLICK|locator:val</code></td>
+                            </tr>
+                            <tr>
+                                <td>ASSERT</td>
+                                <td><code>ASSERT_TITLE|text</code></td>
+                            </tr>
+                            <tr>
+                                <td>WAIT</td>
+                                <td><code>WAIT|ms</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="alert alert-secondary small mb-0">
+                        <strong>Example:</strong><br>
+                        OPEN|https://google.com<br>
+                        TYPE|name:q|Hello<br>
+                        CLICK|name:btnK
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary-custom text-white" data-bs-dismiss="modal">Got
+                        it</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

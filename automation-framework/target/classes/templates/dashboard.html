@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout :: common_head}"></head>
+
+<body>
+
+    <!-- Sidebar Include -->
+    <div th:replace="~{layout :: sidebar}"></div>
+
+    <div class="main-content">
+
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h2 class="fw-bold mb-1">Dashboard Overview</h2>
+                <p class="text-muted mb-0">Welcome back, Harini! Here's what's happening today.</p>
+            </div>
+            <a href="/test/new" class="btn btn-primary-custom text-white shadow-sm">
+                <i class="fas fa-plus me-2"></i> Create New Test
+            </a>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <div class="custom-card p-4 h-100 border-start border-4 border-primary">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="text-muted small fw-bold text-uppercase mb-1">Total Tests</div>
+                            <h2 class="mb-0 fw-bold" th:text="${#lists.size(testCases)}">0</h2>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 p-2 rounded text-primary">
+                            <i class="fas fa-folder fa-lg"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="custom-card p-4 h-100 border-start border-4 border-success">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="text-muted small fw-bold text-uppercase mb-1">Passed</div>
+                            <h2 class="mb-0 fw-bold text-success">
+                                <!-- Placeholder logic for simple stats -->
+                                <span th:text="${#lists.size(recentResults) > 0 ? '85%' : '0%'}">85%</span>
+                            </h2>
+                        </div>
+                        <div class="bg-success bg-opacity-10 p-2 rounded text-success">
+                            <i class="fas fa-check-circle fa-lg"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="custom-card p-4 h-100 border-start border-4 border-danger">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="text-muted small fw-bold text-uppercase mb-1">Failed</div>
+                            <h2 class="mb-0 fw-bold text-danger">
+                                <span th:text="${#lists.size(recentResults) > 0 ? '5' : '0'}">5</span>
+                            </h2>
+                        </div>
+                        <div class="bg-danger bg-opacity-10 p-2 rounded text-danger">
+                            <i class="fas fa-times-circle fa-lg"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="custom-card p-4 h-100 border-start border-4 border-info">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="text-muted small fw-bold text-uppercase mb-1">Avg Duration</div>
+                            <h2 class="mb-0 fw-bold text-info">12s</h2>
+                        </div>
+                        <div class="bg-info bg-opacity-10 p-2 rounded text-info">
+                            <i class="fas fa-stopwatch fa-lg"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="row g-4">
+
+            <!-- Interactive Test List -->
+            <div class="col-lg-8">
+                <div class="custom-card h-100">
+                    <div class="card-header-clean d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Test Cases</h5>
+                        <div class="input-group input-group-sm w-auto">
+                            <span class="input-group-text bg-light border-0"><i class="fas fa-search"></i></span>
+                            <input type="text" class="form-control bg-light border-0" placeholder="Search tests...">
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="ps-4 py-3 text-uppercase text-muted" style="font-size: 0.75rem;">Name
+                                    </th>
+                                    <th class="py-3 text-uppercase text-muted" style="font-size: 0.75rem;">Browser</th>
+                                    <th class="py-3 text-uppercase text-muted" style="font-size: 0.75rem;">Status</th>
+                                    <th class="pe-4 py-3 text-end text-uppercase text-muted"
+                                        style="font-size: 0.75rem;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="test : ${testCases}">
+                                    <td class="ps-4">
+                                        <div class="fw-bold text-dark" th:text="${test.testName}">Login Flow</div>
+                                        <div class="text-muted small" th:text="${test.description}">Checks user login
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span th:if="${test.browserPreference == 'chrome'}"><i
+                                                class="fab fa-chrome text-primary me-1"></i> Chrome</span>
+                                        <span th:if="${test.browserPreference == 'firefox'}"><i
+                                                class="fab fa-firefox-browser text-warning me-1"></i> Firefox</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge rounded-pill bg-light text-dark border">
+                                            Active
+                                        </span>
+                                    </td>
+                                    <td class="pe-4 text-end">
+                                        <button th:id="'btn-run-' + ${test.id}"
+                                            class="btn btn-sm btn-primary-custom text-white py-1 px-3 me-1"
+                                            th:onclick="'runTest(' + ${test.id} + ')'" title="Run Test">
+                                            <i class="fas fa-play" style="font-size: 0.8rem;"></i>
+                                        </button>
+                                        <a th:href="@{/test/delete/{id}(id=${test.id})}"
+                                            class="btn btn-sm btn-light text-danger py-1 px-2"
+                                            onclick="return confirm('Delete this test case?')" title="Delete">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(testCases)}">
+                                    <td colspan="4" class="text-center py-5">
+                                        <img src="https://cdni.iconscout.com/illustration/premium/thumb/empty-state-2130362-1800926.png"
+                                            alt="Empty" style="height: 150px; opacity: 0.6;">
+                                        <p class="text-muted mt-3">No test cases found. Create your first automated
+                                            test!</p>
+                                        <a href="/test/new" class="btn btn-sm btn-outline-primary">Create Now</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity Feed -->
+            <div class="col-lg-4">
+                <div class="custom-card h-100">
+                    <div class="card-header-clean">
+                        <h5 class="card-title">Live Execution Feed</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div th:each="result : ${recentResults}"
+                            class="p-3 border-bottom position-relative hover-bg-light">
+                            <div class="d-flex justify-content-between mb-1">
+                                <strong class="text-dark" style="font-size: 0.95rem;"
+                                    th:text="${result.testCase.testName}">Login Test</strong>
+                                <small class="text-muted"
+                                    th:text="${#temporals.format(result.executionTime, 'HH:mm')}">10:45</small>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="text-muted small">
+                                    <i class="far fa-clock me-1"></i> <span
+                                        th:text="${#temporals.format(result.executionTime, 'MMM dd')}">Jan 14</span>
+                                </div>
+                                <span th:if="${result.status == 'PASS'}" class="badge-status status-pass">
+                                    <i class="fas fa-check me-1"></i> PASS
+                                </span>
+                                <span th:if="${result.status == 'FAIL'}" class="badge-status status-fail">
+                                    <i class="fas fa-times me-1"></i> FAIL
+                                </span>
+                            </div>
+                        </div>
+
+                        <div th:if="${#lists.isEmpty(recentResults)}" class="text-center py-5 px-3">
+                            <div class="text-muted small">No executions recorded yet.</div>
+                            <div class="text-muted small mt-1">Run a test to see results here.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function runTest(id) {
+            const btn = document.getElementById("btn-run-" + id);
+            const originalHtml = btn.innerHTML;
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            btn.disabled = true;
+
+            fetch('/api/execution/run/' + id, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'PASS') {
+                        // SweetAlert could be used here for even better UI
+                        alert('✅ Test Passed Successfully!');
+                    } else {
+                        alert('❌ Test Failed. Check logs.');
+                    }
+                    location.reload();
+                })
+                .catch(err => {
+                    alert('⚠️ System Error during execution');
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                });
+        }
+    </script>
+</body>
+
+</html>

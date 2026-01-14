@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout :: common_head}"></head>
+
+<body>
+
+    <div th:replace="~{layout :: sidebar}"></div>
+
+    <div class="main-content">
+        <h2 class="fw-bold mb-4">Analytics & Reports</h2>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="custom-card p-4 text-center">
+                    <h5 class="mb-3">Test Stability</h5>
+                    <div class="progress mb-3" style="height: 25px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 85%">85% Pass</div>
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 15%">15% Fail</div>
+                    </div>
+                    <p class="text-muted small">Based on last 100 executions</p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="custom-card p-4 text-center">
+                    <h5 class="mb-3">Browser Coverage</h5>
+                    <div class="d-flex justify-content-center gap-4">
+                        <div>
+                            <i class="fab fa-chrome fa-2x text-primary mb-2"></i>
+                            <div class="fw-bold">70%</div>
+                        </div>
+                        <div>
+                            <i class="fab fa-firefox-browser fa-2x text-warning mb-2"></i>
+                            <div class="fw-bold">30%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="alert alert-info border-0 shadow-sm d-flex align-items-center">
+                    <i class="fas fa-lightbulb fa-2x me-3"></i>
+                    <div>
+                        <strong>Pro Feature:</strong> Advanced analytics integration with tools like Grafana or Allure
+                        is coming in v2.0.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
